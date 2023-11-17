@@ -15,7 +15,7 @@ G = 6.67430 * 10 ** -11
 m = [5.9 * 10 ** 24, 7.34 * 10 ** 22, 10]
 init_a = [Vector(0, 0), Vector(0, 0), Vector(0, 0)]
 init_v = [Vector(0, 0), Vector(0, 0), Vector(0, 0)]
-init_x = [Vector(0, 0), Vector(10, 0), Vector(20, 0)]
+init_x = [Vector(0, 0), Vector(384 * 10 ** 6, 0), Vector(20, 0)]
 
 x = init_x
 v = init_v
@@ -36,19 +36,25 @@ f = calc_f('')
 
 # Kinematics Section
 # Acceletation
-
+print(f'sum: {sum([Vector(0,0),Vector(0,0)])}')
 # list comprehension of accelerations
-calc_a = lambda _: [[(f[i][j] / m[i]) for j in range(len(f[i]))] for i in range(len(f))]
+calc_a = lambda _: [sum([(f[i][j] / m[i]) for j in range(len(f[i]))]) for i in range(len(f))]
 
 a_prev = a
 a = calc_a('')
 
 # list comprehension of velocities
-calc_v = lambda _: [[(0.5*(a_prev[i][j]+a[i][j]))*dt for j in range(len(f[i]))] for i in range(len(f))]
+calc_v = lambda _: 1 / 2 * np.array([(np.array(a_prev[i])+np.array(a[i])) * dt for i in range(len(f))])
 
 v_prev = v
-pprint(calc_v(''))
-v = calc_v("penis")
+v += calc_v('')
+
+pprint(f'r: {r}')
+pprint(f'f: {f}')
+pprint(f'a_prev: {a_prev}')
+pprint(f'a: {a}')
+pprint(f'v_prev: {v_prev}')
+pprint(f'v: {v}')
 
 end_time = time.time()
 execution_time = end_time - start_time
