@@ -48,6 +48,11 @@ calc_v = lambda _: 1 / 2 * np.array([(np.array(a_prev[i])+np.array(a[i])) * dt f
 
 v_prev = v
 v += calc_v('')
+# list comprehension of positions
+calc_x = lambda _: np.array([np.array(v_prev[i]) * dt + 1 / 2 * np.array(a_prev[i]) * dt ** 2 for i in range(len(f))])
+
+x_prev = x
+x += calc_x('')
 
 pprint(f'r: {r}')
 pprint(f'f: {f}')
@@ -55,6 +60,8 @@ pprint(f'a_prev: {a_prev}')
 pprint(f'a: {a}')
 pprint(f'v_prev: {v_prev}')
 pprint(f'v: {v}')
+pprint(f'x_prev: {x_prev}')
+pprint(f'x: {x}')
 
 end_time = time.time()
 execution_time = end_time - start_time
