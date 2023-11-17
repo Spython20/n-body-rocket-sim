@@ -8,14 +8,14 @@ start_time = time.time()
 t = 0
 i = 0
 t_end = 100
-dt = 0.001
+dt = 1
 G = 6.67430 * 10 ** -11
 
 # initial conditions
 m = [5.9 * 10 ** 24, 7.34 * 10 ** 22]
-init_a = [Vector(0, 0), Vector(0, 0)]
+init_a = [[Vector(0, 0)], [Vector(0, 0)]]
 init_v = [[Vector(0, 0)], [Vector(0, 0)]]
-init_x = [Vector(0, 0), Vector(384000000, 0)]
+init_x = [Vector(0, 0), Vector(384000000,0)]
 x = init_x
 
 # creates pre-subtracted radii vectors
