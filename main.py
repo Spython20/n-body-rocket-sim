@@ -4,20 +4,21 @@ import numpy as np
 from pprint import pprint
 import time
 import pygame
+import copy
 
 start_time = time.time()
 
-t = 0
-i = 0
+#t = 0
 t_end = 100
 dt = 0.01
-G = 6.67430 * 10 ** -11
+time_index = 0
+G = 10 #6.67430 * 10 ** -11
 
 # initial conditions
-m = [5.9 * 10 ** 24, 7.34 * 10 ** 22, 10]
+m = [20, 300, 100]
 init_a = [Vector(0, 0), Vector(0, 0), Vector(0, 0)]
-init_v = [Vector(0, 0), Vector(0, 0), Vector(0, 0)]
-init_x = [Vector(0, 0), Vector(384 * 10 ** 6, 0), Vector(20, 0)]
+init_v = [Vector(0, 0), Vector(10, 0), Vector(0, 0)]
+init_x = [Vector(100, 200), Vector(200, 300), Vector(300, 400)]
 r_body = [8, 8, 8]
 
 data = []
@@ -45,31 +46,33 @@ for t in np.arange(0, t_end, dt):
     # list comprehension of accelerations
     calc_a = lambda _: [sum([(f[i][j] / m[i]) for j in range(len(f[i]))]) for i in range(len(f))]
 
-    a_prev = a
+    a_prev = copy.deepcopy(a)
     a = calc_a('')
 
     # list comprehension of velocities
-    calc_v = lambda _: (1 / 2) * np.array([(np.array(a_prev[i])+np.array(a[i])) * dt for i in range(len(f))])
+    calc_v = lambda _: 1 / 2 * np.array([(np.array(a_prev[i])+np.array(a[i])) * dt for i in range(len(f))])
 
-    v_prev = v
+    v_prev = copy.deepcopy(v)
     v += calc_v('')
     # list comprehension of positions
     calc_x = lambda _: np.array([np.array(v_prev[i]) * dt + 1 / 2 * np.array(a_prev[i]) * dt ** 2 for i in range(len(f))])
 
-    x_prev = x
+    x_prev = copy.deepcopy(x)
     x += calc_x('')
-    data.append( {
+    data.append({
         't': t,
-        'x': x,
-        'v': v,
-        'a': a,
-        'f': f,
-        'r': r
+        'x': copy.deepcopy(x),
+        'v': copy.deepcopy(v),
+        'a': copy.deepcopy(a),
+        'f': copy.deepcopy(f)
     })
 
-pprint(data[0]['x'][0])
+
 end_time = time.time()
 execution_time = end_time - start_time
+
+#for i in range(len(data)): 
+  # pprint(data[i]['x'])
 
 print("Execution time:", execution_time)
 
@@ -83,16 +86,27 @@ planets = []
 for i in range(len(m)):
     planets.append(Planet(init_x[i], r_body[i]))
 
-
-print(planets)
 pygame.init()
 
+clock = pygame.time.Clock()
 app_running = True
 
 def draw():
     screen.fill((50, 50, 50))
+    for planet in planets:
+        planet.draw(screen)
 
-#def update():
+def timer_tick():
+    global time_index
+    time_index += 1
+
+def update_all_planets(animation_time):
+    for i in range(len(planets)):
+        print(animation_time)
+        planets[i].update(data, i, animation_time)
+        timer_tick()
+
+        #print(f"planet {i}: " + str(planets[i].position))
 
 
 while app_running:
@@ -106,7 +120,8 @@ while app_running:
 
     draw()
 
-    #update()
+    delta_time = dt * clock.tick(144)
+    update_all_planets(time_index)
 
     pygame.display.flip()
 
