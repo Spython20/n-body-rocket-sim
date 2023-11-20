@@ -8,18 +8,17 @@ import copy
 
 start_time = time.time()
 
-#t = 0
 t_end = 100
 dt = 0.01
 time_index = 0
 G = 10 #6.67430 * 10 ** -11
 
 # initial conditions
-m = [20, 300, 100]
-init_a = [Vector(0, 0), Vector(0, 0), Vector(0, 0)]
-init_v = [Vector(0, 0), Vector(10, 0), Vector(0, 0)]
-init_x = [Vector(100, 200), Vector(200, 300), Vector(300, 400)]
-r_body = [8, 8, 8]
+m = [20, 300, 100, 20, 300, 100]
+init_a = [Vector(0, 0), Vector(0, 0), Vector(0, 0), Vector(0, 0), Vector(0, 0), Vector(0, 0)]
+init_v = [Vector(10, 10), Vector(10, 0), Vector(0, 0), Vector(10, 10), Vector(10, 0), Vector(0, 0)]
+init_x = [Vector(100, 200), Vector(200, 300), Vector(300, 400), Vector(50, 200), Vector(100, 300), Vector(500, 400)]
+r_body = [8, 8, 8, 8, 8, 8]
 
 data = []
 
@@ -101,10 +100,10 @@ def timer_tick():
     time_index += 1
 
 def update_all_planets(animation_time):
-    for i in range(len(planets)):
-        print(animation_time)
+    
+    print(animation_time)
+    for i in range(len(planets)):\
         planets[i].update(data, i, animation_time)
-        timer_tick()
 
         #print(f"planet {i}: " + str(planets[i].position))
 
@@ -121,6 +120,7 @@ while app_running:
     draw()
 
     delta_time = dt * clock.tick(144)
+    timer_tick()
     update_all_planets(time_index)
 
     pygame.display.flip()
