@@ -15,4 +15,4 @@ class Planet:
         top_left_position_x = self.position.x - self.radius
         top_left_position_y = self.position.y - self.radius
 
-        pygame.draw.circle(screen, self.color, (top_left_position_x, top_left_position_y), 10)
+        pygame.draw.circle(screen, self.color, (top_left_position_x, top_left_position_y), self.radius)
